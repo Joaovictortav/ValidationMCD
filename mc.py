@@ -2,37 +2,62 @@ import numpy as np
 import sympy as sp
 
 # Defina os símbolos para theta
-theta1, theta2, theta3, theta4, theta5, theta6 = sp.symbols('theta1 theta2 theta3 theta4 theta5 theta6')
+t1, t2, t3, t4, t5, t6 = sp.symbols('theta1 theta2 theta3 theta4 theta5 theta6')
 
-# Substitua os símbolos theta nas expressões
-a = sp.cos(theta2 + theta3 + theta4) * sp.cos(theta1) * sp.cos(theta5) * sp.cos(theta6) + sp.cos(theta6) * sp.sin(theta1) * sp.sin(theta5) - sp.cos(theta1) * sp.sin(theta2 + theta3 + theta4) * sp.sin(theta6)
-b = -sp.cos(theta2 + theta3 + theta4) * sp.cos(theta1) * sp.cos(theta5) * sp.sin(theta6) - sp.sin(theta1) * sp.sin(theta5) * sp.sin(theta6) - sp.cos(theta1) * sp.sin(theta2 + theta3 + theta4) * sp.cos(theta6)
-c = sp.sin(theta1) * sp.cos(theta5) - sp.cos(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.sin(theta5)
-d = -612.7 * sp.cos(theta1) * sp.cos(theta2) - 571.55 * sp.cos(theta1) * sp.cos(theta2 + theta3 + theta4) + 174.15 * sp.sin(theta1) + 119.85 * sp.cos(theta1) * sp.sin(theta2 + theta3 + theta4) + 116.55 * (sp.sin(theta1) * sp.cos(theta5) - sp.cos(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.sin(theta5))
-e = sp.sin(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.cos(theta5) * sp.cos(theta6) - sp.cos(theta6) * sp.cos(theta1) * sp.sin(theta5) - sp.sin(theta1) * sp.sin(theta2 + theta3 + theta4) * sp.sin(theta6)
-f = -sp.sin(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.cos(theta5) * sp.sin(theta6) + sp.sin(theta6) * sp.cos(theta1) * sp.sin(theta5) - sp.sin(theta1) * sp.sin(theta2 + theta3 + theta4) * sp.cos(theta6)
-g = -sp.cos(theta1) * sp.cos(theta5) - sp.sin(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.sin(theta5)
-h = -612.7 * sp.sin(theta1) * sp.cos(theta2) - 571.55 * sp.sin(theta1) * sp.cos(theta2 + theta3 + theta4) - 174.15 * sp.cos(theta1) + 119.85 * sp.sin(theta1) * sp.sin(theta2 + theta3 + theta4) - 116.55 * (sp.cos(theta1) * sp.cos(theta5) + sp.sin(theta1) * sp.cos(theta2 + theta3 + theta4) * sp.sin(theta5))
-i = sp.sin(theta2 + theta3 + theta4) * sp.cos(theta5) * sp.cos(theta6) + sp.cos(theta2 + theta3 + theta4) * sp.sin(theta6)
-j = -sp.sin(theta2 + theta3 + theta4) * sp.cos(theta5) * sp.sin(theta6) + sp.cos(theta2 + theta3 + theta4) * sp.cos(theta6)
-k = -sp.sin(theta2 + theta3 + theta4) * sp.sin(theta5)
-l = -612.7 * sp.sin(theta2) - 571.55 * sp.sin(theta2 + theta3) - 119.85 * sp.cos(theta2 + theta3 + theta4) - 116.55 * sp.sin(theta2 + theta3 + theta4) * sp.sin(theta5) + 180.7
+l1 = 180.7
+l2 = 174.15
+l3 = 612.7
+l4 = 174.15
+l5 = 571.55
+l6 = 174.15
+l7 = 119.85
+l8 = 116.55
 
-# Crie a matriz 4x4
-matrix = sp.Matrix([[a, b, c, d],
-                    [e, f, g, h],
-                    [i, j, k, l],
+d1 = 0.1807
+d2 = 0
+d3 = 0
+d4 = 0.17415
+d5 = 0.11985
+d6 = 0.11655
+
+alp1 = np.pi/2
+alp2 = 0
+alp3 = 0
+alp4 = np.pi/2
+alp5 = -np.pi/2
+alp6 = 0
+
+a1 = 0
+a2 = -0.6127
+a3 = -0.57155
+a4 = 0
+a5 = 0
+a6 = 0
+
+def mat(t,d,a,alp):
+        return sp.Matrix([[sp.cos(t), -sp.sin(t)*sp.cos(alp), sp.sin(t)*sp.sin(alp), a*sp.cos(t)],
+                    [sp.sin(t), sp.cos(t)*sp.cos(alp), -sp.cos(t)*sp.sin(alp), a*sp.sin(t)],
+                    [0, sp.sin(alp), sp.cos(alp), d],
                     [0, 0, 0, 1]])
 
+# Matrices multiplication
+mat1 = mat(t1,d1,a1,alp1)
+mat2 = mat(t2,d2,a2,alp2)
+mat3 = mat(t3,d3,a3,alp3)
+mat4 = mat(t4,d4,a4,alp4)
+mat5 = mat(t5,d5,a5,alp5)
+mat6 = mat(t6,d6,a6,alp6)
 
-theta1_value = np.radians(90)
-theta2_value = np.radians(0)
-theta3_value = np.radians(90)
-theta4_value = np.radians(0)
+HTM = mat1@mat2@mat3@mat4@mat5@mat6
+
+theta1_value = np.radians(30)
+theta2_value = np.radians(20)
+theta3_value = np.radians(85)
+theta4_value = np.radians(60)
 theta5_value = np.radians(90)
-theta6_value = np.radians(0)
+theta6_value = np.radians(84)
 
-matrix = matrix.subs({theta1: theta1_value, theta2: theta2_value, theta3: theta3_value, theta4: theta4_value, theta5: theta5_value, theta6: theta6_value})
+matrix = HTM.subs({t1: theta1_value, t2: theta2_value, t3: theta3_value, t4: theta4_value, t5: theta5_value, t6: theta6_value})*1000
 
 print("Matriz 4x4:")
 sp.pprint(matrix, use_unicode=True)
